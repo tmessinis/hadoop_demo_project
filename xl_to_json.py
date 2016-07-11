@@ -82,9 +82,9 @@ def parse_file(spreadsheet):
         if 'model_name' in item:
             car_models_lst.append(item)
     
-    #pprint(car_models_lst)
+    pprint(car_models_lst)
     parse_json(car_models_lst, 'w')
-    mongodb_import(car_models_lst)
+    #mongodb_import(car_models_lst)
 
 # The spreadsheet needs to be passed as an argument from the cli.    
 parse_file(sys.argv[1])

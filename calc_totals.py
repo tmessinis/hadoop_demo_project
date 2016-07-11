@@ -4,6 +4,25 @@ import json
 from pymongo import MongoClient
 from pprint import pprint
 
+def mongo_export(database, collection):
+    return_lst = []
+    client = MongoClient("mongodb://pymongouser:123456@10.0.1.34/test_car_sales_db")
+    db = eval('client.{0}'.format(database))
+    table = eval('db.{0}'.format(collection))
+    
+    for item in table.find():
+        return_lst.append(item)
+        
+    return return_lst
+
+def mongo_import(database, collection, data_lst):
+    client = MongoClient("mongodb://pymongouser:123456@10.0.1.34/test_car_sales_db")
+    db = eval('client.{0}'.format(database))
+    table = eval('db.{0}'.format(collection))
+    
+    for item in data_lst:
+        table.insert(item)
+    
 def calc_totals(json_dict):
     # Initialize variables to be used by for loops below.
     car_model_totals = []
@@ -17,7 +36,7 @@ def calc_totals(json_dict):
         for key in doc:
             if key == 'model_name':
                 data_dict[key] = doc[key]
-            else:
+            elif key == 'annual_sales':
                 for year in doc[key]:
                     total += doc[key][year]
         
@@ -47,8 +66,11 @@ def calc_totals(json_dict):
         temp_dict[key] = data_dict[key]
         annual_totals.append(temp_dict)
      
-    pprint(car_model_totals)
-    pprint(annual_totals)
+    #pprint(car_model_totals)
+    #pprint(annual_totals)
+    mongo_import('test_car_sales_db', 'car_model_totals', car_model_totals)
+    mongo_import('test_car_sales_db', 'annual_totals', annual_totals)
 
-data = open(sys.argv[1], 'r')
-calc_totals(json.load(data))
+#data = open(sys.argv[1], 'r')
+#calc_totals(json.load(data))
+calc_totals(mongo_export('test_car_sales_db', 'car_sales'))

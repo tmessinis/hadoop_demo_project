@@ -23,13 +23,10 @@ def parse_json(json_data, option):
 
 def mongodb_import(data_lst):
     client = MongoClient("mongodb://pymongouser:123456@10.0.1.34/test_car_sales_db")
-        
     db = client.test_car_sales_db
     
     for item in data_lst:
         db.car_sales.insert(item)
-        
-    print(db.car_sales.find())
     
     return None
             
@@ -82,9 +79,9 @@ def parse_file(spreadsheet):
         if 'model_name' in item:
             car_models_lst.append(item)
     
-    pprint(car_models_lst)
+    #pprint(car_models_lst)
     parse_json(car_models_lst, 'w')
-    #mongodb_import(car_models_lst)
+    mongodb_import(car_models_lst)
 
 # The spreadsheet needs to be passed as an argument from the cli.    
 parse_file(sys.argv[1])

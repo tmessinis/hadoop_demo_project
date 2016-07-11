@@ -10,31 +10,34 @@ def calc_totals(json_dict):
     data_dict = {}
     total = 0
     
-    for key in json_dict:
-        if key == 'model_name':
-            data_dict[key] = json_dict[key]
-        else:
-            for year in json_dict[key]:
-                total += json_dict[key][year]
+    for doc in json_dict:
+        for key in doc:
+            if key == 'model_name':
+                data_dict[key] = doc[key]
+            else:
+                for year in doc[key]:
+                    total += doc[key][year]
     
-    data_dict['total_sales'] = total
-    car_model_totals.append(data_dict)
-    data_dict = {}
+        data_dict['total_sales'] = total
+        car_model_totals.append(data_dict)
+        data_dict = {}
+        total = 0
     
-    for key in json_dict:
+    for key in json_dict[0]:
         if key == 'annual_sales':
-            for year in json_dict[key]:
-                data_dict[year] = []
+            for year in json_dict[0][key]:
+                data_dict[year] = 0
             break
     
-    for key in json_dict:
-        if key == 'annual_sales':
-            for year in json_dict[key]:
-                data_dict[year].append(json_dict[key][year])
+    for doc in json_dict:
+        for key in doc:
+            if key == 'annual_sales':
+                for year in doc[key]:
+                    data_dict[year] += doc[key][year]
                 
     for key in data_dict:
         temp_dict = {}
-        temp_dict[key] = sum(data_dict[key])
+        temp_dict[key] = data_dict[key]
         annual_totals.append(temp_dict)
      
     pprint(car_model_totals)

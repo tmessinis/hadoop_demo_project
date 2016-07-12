@@ -1,6 +1,7 @@
 import sys
 import json
 
+from pymongo import MongoClient
 from pprint import pprint
 
 # Script will attempt to convert vehicle sale data from an excel spreasheet from
@@ -71,12 +72,14 @@ def parse_file(input_text):
             
         # The dict items get added to a list. Dict items are reset and counter increases
         # by one.
-        car_models_lst.append(data_dict)
+        if data_dict != {}:
+            car_models_lst.append(data_dict)
         data_dict = {}
         annual_sales_dict = {}
         counter += 1
     
     pprint(car_models_lst)
+    parse_json(car_models_lst, 'w')
+    mongodb_import(car_models_lst)
 
-# The spreadsheet needs to be passed as an argument from the cli.
 parse_file(sys.stdin)

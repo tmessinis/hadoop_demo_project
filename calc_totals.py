@@ -52,7 +52,7 @@ def calc_totals(json_dict):
             for year in json_dict[0][key]:
                 data_dict[year] = 0
             break
-    
+            
     # Loop through json document to calculate the totals for each year.
     for doc in json_dict:
         for key in doc:
